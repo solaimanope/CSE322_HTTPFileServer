@@ -1,20 +1,31 @@
-import java.io.File;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 
 public class ServerFileSender extends GetRequestHandler {
-    public static String CTYPE = "application/force-download";
+    private static int BUFFER_SIZE = 1;
+
+    File file;
     ServerFileSender(File file) {
+        this.file = file;
         status = "200 OK";
-        contentType = CTYPE;
+        contentType = "application/force-download";
         contentLength = file.length();
     }
 
     @Override
-    public void sendData(OutputStream outputStream) {
+    public void sendData(OutputStream outputStream) throws Exception {
         PrintWriter printWriter = new PrintWriter(outputStream);
         sendHTMLIntro(printWriter);
-        //printWriter.write(contentData);
-        printWriter.flush();
+
+        DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
+
+        byte[] buffer = new byte[BUFFER_SIZE];
+        while (true) {
+            int readBytes = dataInputStream.read(buffer);
+            if (readBytes < 1) break;
+            outputStream.write(buffer, 0, readBytes);
+        }
+        outputStream.flush();
+
+        dataInputStream.close();
     }
 }

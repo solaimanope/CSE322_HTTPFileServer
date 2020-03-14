@@ -12,7 +12,6 @@ public class RequestHandler extends Thread {
         this.socket = socket;
         socketOutputStream = socket.getOutputStream();
         socketInputStream = socket.getInputStream();
-        //printWriter = new PrintWriter(socketOutputStream);
         bufferedReader = new BufferedReader(new InputStreamReader(socketInputStream));
     }
 

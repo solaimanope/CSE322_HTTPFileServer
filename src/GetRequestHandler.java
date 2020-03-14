@@ -17,5 +17,5 @@ public abstract class GetRequestHandler {
         printWriter.flush();
     }
 
-    public abstract void sendData(OutputStream outputStream);
+    public abstract void sendData(OutputStream outputStream) throws Exception;
 }
